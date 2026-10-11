@@ -1,0 +1,28 @@
+[package]
+name = "my_pgp_decrypt"
+version = "0.1.0"
+edition = "2024"
+
+[[bin]]
+name = "MyPgpDecrypt"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1.0.104"
+pgp = "0.20.0"
+zeroize = "1.9.0"
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[target.'cfg(windows)'.dependencies]
+native-windows-gui = "1.0.13"
+winreg = "0.55"
+windows = { version = "0.61", features = ["Win32_Foundation", "Win32_Security_Cryptography", "Win32_System_LibraryLoader", "Win32_UI_WindowsAndMessaging", "Win32_System_Console", "Win32_Storage_FileSystem", "Win32_System_Threading", "Win32_UI_Input_KeyboardAndMouse"] }
+
+[build-dependencies]
+embed-resource = "3.0.11"
