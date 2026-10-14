@@ -3,7 +3,7 @@
 Windows 전용 PGP 복호화 도구 (Rust, native-windows-gui + rPGP)
 
 ## 요구 사항
-- **Windows 10 이상 (64비트)**: 최신 Rust 표준 라이브러리가 Windows 10 이상에만 있는 시스템 함수(`WaitOnAddress`, `ProcessPrng`)를 쓰기 때문에, Windows 7/8 에서는 정상적으로 실행되지 않는다.
+- **Windows 10 이상 (64비트)**: Windows 10 이상에만 지원되는 DPAPI(Data Protection API)를 사용하기 때문에, Windows 10 이상의 환경에서만 정상적으로 실행된다.
 
 ## 사용
 - `MyPgpDecrypt.exe` **GUI**
@@ -38,13 +38,34 @@ Windows 전용 PGP 복호화 도구 (Rust, native-windows-gui + rPGP)
 
 추가로 탐색기 우클릭 메뉴를 등록하면 레지스트리 `HKCU\Software\Classes\SystemFileAssociations\.pgp\shell\MyPgpDecrypt` 항목으로 설정된다.
 
-## 빌드 방법
+## 직접 빌드
+- 아래와 같이 소스를 clone 받은 후에 디렉토리로 이동한다.
+  ```sh
+  git clone https://github.com/yrpark99/MyPgpDecrypt.git
+  cd MyPgpDecrypt/
+  ```
 - 이 프로그램은 Windows 전용이므로, 편의상 `.cargo/config.toml` 파일을 아래와 같이 작성하였다.
   ```toml
   [build]
   target = "x86_64-pc-windows-gnu"
   ```
-- 따라서 Linux 환경에서 아래와 같이 실행시키면 Windows 용으로 빌드된다.
+- 따라서 Linux 환경에서는 먼저 아래와 같이 Windows 크로스 툴체인을 설치한다.
+  ```sh
+  sudo apt install binutils-mingw-w64-x86-64 gcc-mingw-w64-x86-64
+  rustup target add x86_64-pc-windows-gnu
+  ```
+  이후 아래와 같이 실행시키면 Windows 용으로 빌드된다.
   ```sh
   cargo build --release
+  ```
+  결과로 target/x86_64-pc-windows-gnu/release/MyPgpDecrypt.exe 파일이 생성된다.
+
+## 실행 파일만 다운로드
+- curl 이용 예
+  ```sh
+  curl -L -o MyPgpDecrypt.exe https://github.com/yrpark99/MyPgpDecrypt/releases/latest/download/MyPgpDecrypt.exe
+  ```
+- wget 이용 예
+  ```sh
+  wget -q https://github.com/yrpark99/MyPgpDecrypt/releases/latest/download/MyPgpDecrypt.exe
   ```
